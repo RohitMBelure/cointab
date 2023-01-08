@@ -17,9 +17,12 @@ import { Pagination } from "../Components/Pagination";
 import { getUsers } from "../Redux/action";
 import { useState } from "react";
 import { useEffect } from "react";
+import load from "../Assests/loading.gif";
 
 export const PageTwo = () => {
-  const { usersData, currentPage, totalPages } = useSelector((state) => state);
+  const { usersData, currentPage, totalPages, isLoading } = useSelector(
+    (state) => state
+  );
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialFilterBy = searchParams.getAll("gender");
@@ -63,63 +66,79 @@ export const PageTwo = () => {
   };
 
   return (
-    <div>
-      <Box
-        display={"flex"}
-        justifyContent="space-between"
-        alignItems={"center"}
-        margin="1rem 0rem 2rem 0rem"
-      >
-        <Link to="/">
-          <Button colorScheme="blue">GO BACK</Button>
-        </Link>
-        <Select
-          placeholder="FILTER BY GENDER"
-          width="15rem"
-          fontWeight={"700"}
-          onClick={(e) => handleFilter(e.target.value)}
+    <>
+      {isLoading ? (
+        <Box
+          as="span"
+          display="flex"
+          justifyContent={"center"}
+          alignItems="center"
+          width={"100%"}
+          height="100vh"
         >
-          <option value="male">MALE</option>
-          <option value="female">FEMALE</option>
-        </Select>
-      </Box>
-      <TableContainer>
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th fontSize={"20px"}>PROFILE</Th>
-              <Th fontSize={"20px"}>NAME</Th>
-              <Th fontSize={"20px"}>AGE</Th>
-              <Th fontSize={"20px"}>GENDER</Th>
-              <Th fontSize={"20px"}>EMAIL</Th>
-              <Th fontSize={"20px"}>PHONE</Th>
-              <Th fontSize={"20px"}>COUNTRY</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {usersData?.map((element, index) => (
-              <Tr key={index}>
-                <Td>
-                  <Image src={`${element.picture.large}`} />
-                </Td>
-                <Td>{`${element.name.title}. ${element.name.first} ${element.name.last}`}</Td>
-                <Td>{`${element.dob.age} Yrs.`}</Td>
-                <Td>{`${element.gender}`}</Td>
-                <Td>{`${element.email}`}</Td>
-                <Td>{`${element.phone}`}</Td>
-                <Td>{`${element.location.country}`}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <Box>
-        <Pagination
-          currentPage={+currentPage}
-          totalPage={totalPages}
-          onChange={handlePagination}
-        />
-      </Box>
-    </div>
+          <Image src={load} />
+        </Box>
+      ) : (
+        <div>
+          <Box
+            display={"flex"}
+            justifyContent="space-between"
+            alignItems={"center"}
+            margin="1rem 0rem 2rem 0rem"
+          >
+            <Link to="/">
+              <Button colorScheme="blue">GO BACK</Button>
+            </Link>
+            <Select
+              placeholder="FILTER BY GENDER"
+              width="15rem"
+              defaultValue={filterByGender}
+              fontWeight={"700"}
+              onChange={(e) => handleFilter(e.target.value)}
+            >
+              <option value="male">MALE</option>
+              <option value="female">FEMALE</option>
+            </Select>
+          </Box>
+          <TableContainer>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th fontSize={"20px"}>PROFILE</Th>
+                  <Th fontSize={"20px"}>NAME</Th>
+                  <Th fontSize={"20px"}>AGE</Th>
+                  <Th fontSize={"20px"}>GENDER</Th>
+                  <Th fontSize={"20px"}>EMAIL</Th>
+                  <Th fontSize={"20px"}>PHONE</Th>
+                  <Th fontSize={"20px"}>COUNTRY</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {usersData?.map((element, index) => (
+                  <Tr key={index}>
+                    <Td>
+                      <Image src={`${element.picture.large}`} />
+                    </Td>
+                    <Td>{`${element.name.title}. ${element.name.first} ${element.name.last}`}</Td>
+                    <Td>{`${element.dob.age} Yrs.`}</Td>
+                    <Td>{`${element.gender}`}</Td>
+                    <Td>{`${element.email}`}</Td>
+                    <Td>{`${element.phone}`}</Td>
+                    <Td>{`${element.location.country}`}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <Box>
+            <Pagination
+              currentPage={+currentPage}
+              totalPage={totalPages}
+              onChange={handlePagination}
+            />
+          </Box>
+        </div>
+      )}
+    </>
   );
 };

@@ -1,12 +1,14 @@
 import * as types from "./actionTypes";
 import axios from "axios";
 
+// const base_url = `http://localhost:8080`;
+const base_url = `https://cointab-backend-api.onrender.com`;
+
 export const getUsers = (params) => (dispatch) => {
   dispatch({ type: types.GET_USERS_REQUEST });
   return axios
-    .get(`http://localhost:8080/users`, params)
+    .get(`${base_url}/users`, params)
     .then((res) => {
-      // console.log(res.data);
       return dispatch({
         type: types.GET_USERS_SUCCESS,
         payload: res.data.data,
@@ -24,9 +26,8 @@ export const getUsers = (params) => (dispatch) => {
 export const deleteUsers = () => (dispatch) => {
   dispatch({ type: types.DELETE_USERS_REQUEST });
   return axios
-    .delete("http://localhost:8080/users/delete")
+    .delete(`${base_url}/users/delete`)
     .then((res) => {
-      // console.log(res.data);
       return dispatch({
         type: types.DELETE_USERS_SUCCESS,
         payload: res.data.data,
