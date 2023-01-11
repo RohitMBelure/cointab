@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   id: Object,
   picture: Object,
   nat: String,
+  group: String,
 });
 const UserModel = mongoose.model("users", userSchema);
 

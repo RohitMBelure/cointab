@@ -28,6 +28,9 @@ usersRouter.get("/", async (req, res) => {
       .get(`https://randomuser.me/api/?results=50`)
       .then(async (res) => {
         let data = res.data.results;
+        data = data.map((ele) =>
+          ele.gender == "male" ? (ele.group = "B") : (ele.group = "A")
+        );
         const temp = await UserModel.insertMany(data);
         count = await UserModel.find(params).countDocuments();
         usersData = await UserModel.find(params).limit(Limit).skip(skip);
