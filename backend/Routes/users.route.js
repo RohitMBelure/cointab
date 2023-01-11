@@ -29,7 +29,15 @@ usersRouter.get("/", async (req, res) => {
       .then(async (res) => {
         let data = res.data.results;
         data = data.map((ele) =>
-          ele.gender == "male" ? (ele.group = "B") : (ele.group = "A")
+          ele.gender == "male"
+            ? {
+                ...ele,
+                group: "B",
+              }
+            : {
+                ...ele,
+                group: "A",
+              }
         );
         const temp = await UserModel.insertMany(data);
         count = await UserModel.find(params).countDocuments();
